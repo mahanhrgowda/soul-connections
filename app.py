@@ -163,7 +163,7 @@ with st.expander("About Starseeds ⭐👽"):
 
 with st.expander("About Twin Flames 🔥💑"):
     st.write("""
-    Twin flames are conceptualized as the "mirror soul" or the other half of one's essence, split from the same original soul source. This spiritual bond is characterized by an overwhelming, magnetic attraction, where one flees the intensity that goes beyond romance, aimed at fostering deep personal and spiritual growth. Encounters often involve stages of intense union, separation (e.g., "runner-chaser" dynamics), and eventual reunion, all to facilitate healing and ascension.
+    Twin flames are conceptualized as the "mirror soul" or the other half of one's essence, split from the same original soul source. This spiritual bond is characterized by an overwhelming, magnetic attraction that goes beyond romance, aimed at fostering deep personal and spiritual growth. Encounters often involve stages of intense union, separation (e.g., "runner-chaser" dynamics where one flees the intensity), and eventual reunion, all to facilitate healing and ascension.
 
     Key features include:
     - Instant soul recognition, as if reuniting with a long-lost part of oneself. 💖
@@ -374,13 +374,25 @@ if st.button("Match and Explore 🔍"):
     st.subheader("Connection Type Inference 🔗")
     sun_diff = min(abs(positions1['sun'] - positions2['sun']), 360 - abs(positions1['sun'] - positions2['sun']))
     if abs(sun_diff - 180) <= 8:
-        st.write("Sun opposition - Classic twin flame mirror! 🔥🪞 Indicates deep transformation through reflection.")
+        st.write("""
+        Sun opposition - Classic twin flame mirror! 🔥🪞 Indicates deep transformation through reflection.
+        Sun opposition in synastry is a hallmark of twin flame connections, where the Suns are 180 degrees apart, creating a powerful mirror effect that highlights opposites and fosters profound personal growth through reflection and balance. This aspect brings intense attraction and polarization, often leading to transformative experiences where each partner sees their shadow self in the other, prompting deep healing and evolution 🔥🪞. In twin flame dynamics, it symbolizes the divine masculine and feminine energies coming together to achieve wholeness, but it can also manifest as conflicts that serve as catalysts for spiritual awakening. Astrologers note that this opposition encourages empathy and understanding, turning differences into strengths for a shared higher purpose.
+        """)
     elif abs(sun_diff - 0) <= 8 or abs(sun_diff - 120) <= 8 or abs(sun_diff - 60) <= 8:
-        st.write("Harmonious Sun aspect - Soulmate energy for support and growth. ❤️")
+        st.write("""
+        Harmonious Sun aspect - Soulmate energy for support and growth. ❤️
+        Harmonious Sun aspects, such as conjunctions (0°), trines (120°), or sextiles (60°), indicate soulmate energy characterized by natural compatibility, mutual support, and effortless growth ❤️🏡. These aspects suggest souls that resonate on a core level, providing encouragement and stability without the intense challenges of other connections. In soulmate relationships, they facilitate a sense of familiarity and joy, where partners inspire each other's self-expression and life path, often leading to long-term harmony and shared adventures. This energy is nurturing, promoting emotional security and creative collaboration, making it ideal for platonic or romantic bonds that feel like "coming home."
+        """)
     elif abs(sun_diff - 90) <= 8:
-        st.write("Sun square - Karmic lessons, potential catalyst for change. ⚔️")
+        st.write("""
+        Sun square - Karmic lessons, potential catalyst for change. ⚔️
+        Sun square aspects (90°) in synastry point to karmic lessons and dynamic tension that acts as a catalyst for change and personal development ⚔️🌱. This challenging aspect creates friction between egos and life directions, forcing partners to confront differences and grow through adversity. In karmic or soul family contexts, it represents unresolved past-life issues that need resolution, often manifesting as power struggles or motivational clashes that ultimately build resilience and wisdom. While it can feel obstructive initially, the square drives evolution, turning obstacles into opportunities for deeper understanding and transformation.
+        """)
     else:
-        st.write("Neutral connection - Explore further with intuition. 🌿")
+        st.write("""
+        Neutral connection - Explore further with intuition. 🌿
+        A neutral connection, where no significant Sun aspects are present, suggests a bond that lacks immediate astrological intensity, inviting exploration through intuition and personal experiences rather than predefined cosmic indicators 🌿🧭. This doesn't diminish the potential for meaningful interaction; instead, it encourages relying on inner guidance, synchronicities, and real-world compatibility to uncover the relationship's purpose. In spiritual terms, neutral charts may indicate flexible, free-will-based connections where growth emerges organically, without the pressure of karmic mandates, allowing for authentic discovery and evolution based on present-moment choices.
+        """)
 
     nn_diff1 = min(abs(positions1['north_node'] - positions2['sun']), 360 - abs(positions1['north_node'] - positions2['sun']))
     nn_diff2 = min(abs(positions2['north_node'] - positions1['sun']), 360 - abs(positions2['north_node'] - positions1['sun']))
