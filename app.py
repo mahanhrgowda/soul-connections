@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import date, time
+from datetime import date, time, timedelta
 from math import sin, cos, tan, atan2, radians, degrees, floor, sqrt, fmod
 
 PI = 3.14159265358979323846
@@ -113,10 +113,7 @@ def calculate_ascendant(d, lat, lon_deg):
     denominator = cos_ramc * cos_e - sin_e * tan_gl * sin_ramc
     if denominator == 0:
         denominator = 1e-10
-    tan_asc = sin_ramc / denominator
-    asc_lon = degrees(atan(tan_asc))
-    if cos_ramc < 0:
-        asc_lon += 180
+    asc_lon = degrees(atan2(sin_ramc, denominator))
     if asc_lon < 0:
         asc_lon += 360
     asc_lon = fmod(asc_lon, 360)
@@ -225,32 +222,33 @@ col1, col2 = st.columns(2)
 
 default_date = date(1993, 7, 12)
 default_time = time(12, 26)
-default_tz = "IST (UTC+5:30)"
-default_lat = 28.61  # Delhi latitude
-default_lon = 77.20  # Delhi longitude
+default_tz = "UTC+5:30"
+default_lat = 13.3159  # 13.3159° N
+default_lon = 75.7730  # 75.7730° E
+
+tz_options = ["UTC+0:00", "UTC+5:30", "UTC-5:00", "UTC+1:00", "UTC+2:00", "UTC+3:00", "UTC+4:00", "UTC+6:00", "UTC+7:00", "UTC+8:00", "UTC+9:00", "UTC+10:00", "UTC-1:00", "UTC-2:00", "UTC-3:00", "UTC-4:00", "UTC-6:00", "UTC-7:00", "UTC-8:00", "UTC-9:00", "UTC-10:00"]
 
 with col1:
     st.subheader("Person 1")
     date1 = st.date_input("Birth Date (DD/MM/YYYY)", value=default_date, key="date1")
-    time1 = st.time_input("Birth Time (optional, default noon)", value=default_time, key="time1")
-    tz1 = st.text_input("Timezone (e.g., IST (UTC+5:30))", value=default_tz, key="tz1")
+    time1 = st.time_input("Birth Time (optional, default noon)", value=default_time, key="time1", step=timedelta(minutes=1))
+    tz1 = st.selectbox("Timezone", options=tz_options, index=tz_options.index(default_tz), key="tz1")
     lat1 = st.number_input("Latitude (decimal degrees)", value=default_lat, key="lat1")
     lon1 = st.number_input("Longitude (decimal degrees)", value=default_lon, key="lon1")
 
 with col2:
     st.subheader("Person 2")
     date2 = st.date_input("Birth Date (DD/MM/YYYY)", value=default_date, key="date2")
-    time2 = st.time_input("Birth Time (optional, default noon)", value=default_time, key="time2")
-    tz2 = st.text_input("Timezone (e.g., IST (UTC+5:30))", value=default_tz, key="tz2")
+    time2 = st.time_input("Birth Time (optional, default noon)", value=default_time, key="time2", step=timedelta(minutes=1))
+    tz2 = st.selectbox("Timezone", options=tz_options, index=tz_options.index(default_tz), key="tz2")
     lat2 = st.number_input("Latitude (decimal degrees)", value=default_lat, key="lat2")
     lon2 = st.number_input("Longitude (decimal degrees)", value=default_lon, key="lon2")
 
 def get_tz_offset(tz_str):
-    if "UTC+" in tz_str:
-        offset_str = tz_str.split("UTC+")[1].split(")")[0]
-        hours, minutes = map(float, offset_str.split(":"))
-        return hours + minutes / 60
-    return 0  # Default UTC
+    sign = 1 if '+' in tz_str else -1
+    offset_str = tz_str.split('UTC')[1].lstrip('+-')
+    hours, minutes = map(float, offset_str.split(":"))
+    return sign * (hours + minutes / 60)
 
 offset1 = get_tz_offset(tz1)
 offset2 = get_tz_offset(tz2)
