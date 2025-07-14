@@ -163,7 +163,7 @@ with st.expander("About Starseeds ⭐👽"):
 
 with st.expander("About Twin Flames 🔥💑"):
     st.write("""
-    Twin flames are conceptualized as the "mirror soul" or the other half of one's essence, split from the same original soul source. This spiritual bond is characterized by an overwhelming, magnetic attraction that goes beyond romance, aimed at fostering deep personal and spiritual growth. Encounters often involve stages of intense union, separation (e.g., "runner-chaser" dynamics where one flees the intensity), and eventual reunion, all to facilitate healing and ascension.
+    Twin flames are conceptualized as the "mirror soul" or the other half of one's essence, split from the same original soul source. This spiritual bond is characterized by an overwhelming, magnetic attraction, where one flees the intensity that goes beyond romance, aimed at fostering deep personal and spiritual growth. Encounters often involve stages of intense union, separation (e.g., "runner-chaser" dynamics), and eventual reunion, all to facilitate healing and ascension.
 
     Key features include:
     - Instant soul recognition, as if reuniting with a long-lost part of oneself. 💖
@@ -219,7 +219,7 @@ st.header("Enter Birth Details for Two Persons 📅")
 col1, col2 = st.columns(2)
 
 default_date = date(1993, 7, 12)
-default_time = time(12, 0)
+default_time = time(12, 26)
 default_tz = "IST (UTC+5:30)"
 default_lat = 13.3159  # 13.3159° N
 default_lon = 75.7730  # 75.7730° E
