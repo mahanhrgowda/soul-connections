@@ -80,8 +80,7 @@ def calculate_planet_position(d, planet, x_earth, y_earth, z_earth, mj, ms, mu, 
             break
     xv = a * (cos(radians(E)) - e)
     yv = a * sqrt(1 - e**2) * sin(radians(E))
-    v = degrees(atan2(yv, xv))
-    r = sqrt(xv**2 + yv**2)
+    v = sqrt(xv**2 + yv**2)
     vrad = radians(v + w)
     Nr = radians(N)
     ir = radians(i)
@@ -109,7 +108,7 @@ def calculate_ascendant(d, lat, lon_deg):
     cos_e = cos(radians(oblecl))
     tan_gl = tan(radians(lat))
     sin_ramc = sin(radians(ramc))
-    cos_ramc = cos(radians(ramc))
+    cos_ramc = cos(radians(ramc ))
     denominator = cos_ramc * cos_e - sin_e * tan_gl * sin_ramc
     if denominator == 0:
         denominator = 1e-10
@@ -158,7 +157,7 @@ with st.expander("About Starseeds ⭐👽"):
     - Heightened empathy, intuition, or psychic sensitivities. 🔮
     - Intense interest in astronomy, UFOs, ancient cultures, or cosmic phenomena. 🌠
     - A strong sense of purpose, often directed toward activism, healing professions, or spiritual guidance. 🌍
-    - Sensitivities to environmental factors like noise, food, or energies. 🌿
+    - Sensitivities to environmental factors like noise, food, or energies. 🌿�
 
     From a psychological standpoint, identifying as a starseed can provide a sense of purpose for those feeling disconnected in modern life, serving as a coping mechanism for existential unease, though it lacks empirical scientific support. Critics highlight potential historical ties to problematic ideologies, such as white supremacy in early formulations, and view it as pseudoscience. The idea gained traction through books, online forums, and influencers in spiritual communities.
     """)
@@ -220,35 +219,62 @@ st.header("Enter Birth Details for Two Persons 📅")
 
 col1, col2 = st.columns(2)
 
-default_date = date(1993, 7, 12)
-default_time = time(12, 26)
-default_tz = "UTC+5:30"
+default_date = "IST (UTC+5:30)"
+default_time = time(12, 0)
+default_tz = "IST (UTC+5:30)"
 default_lat = 13.3159  # 13.3159° N
 default_lon = 75.7730  # 75.7730° E
 
-tz_options = ["UTC+0:00", "UTC+5:30", "UTC-5:00", "UTC+1:00", "UTC+2:00", "UTC+3:00", "UTC+4:00", "UTC+6:00", "UTC+7:00", "UTC+8:00", "UTC+9:00", "UTC+10:00", "UTC-1:00", "UTC-2:00", "UTC-3:00", "UTC-4:00", "UTC-6:00", "UTC-7:00", "UTC-8:00", "UTC-9:00", "UTC-10:00"]
+tz_options = [
+    "UTC (UTC+0:00)", 
+    "IST (UTC+5:30)",
+    "EST (UTC-5:00)",
+    "CST (UTC-6:00)",
+    "PST (UTC-8:00)",
+    "MST (UTC-7:00)",
+    "CET (UTC+1:00)",
+    "EET (UTC+2:00)",
+    "MSK (UTC+3:00)",
+    "GST (UTC+4:00)",
+    "PKT (UTC+5:00)",
+    "BST (UTC+6:00)",
+    "ICT (UTC+7:00)",
+    "CST (UTC+8:00)",  # China
+    "JST (UTC+9:00)",
+    "AEST (UTC+10:00)",
+    "BRT (UTC-3:00)",
+    "AST (UTC-4:00)",
+    "AKST (UTC-9:00)",
+    "HST (UTC-10:00)"
+]
+
+def get_tz_offset(tz_str):
+    # Extract UTC offset from string like "IST (UTC+5:30)"
+    if '(' not in tz_str:
+        return 0.0
+    offset_part = tz_str.split('(')[1].split(')')[0].replace('UTC', '')
+    sign = 1 if '+' in offset_part else -1
+    offset_str = offset_part.lstrip('+-')
+    parts = offset_str.split(':')
+    hours = float(parts[0])
+    minutes = float(parts[1]) if len(parts) > 1 else 0.0
+    return sign * (hours + minutes / 60)
 
 with col1:
-    st.subheader("Person 1")
-    date1 = st.date_input("Birth Date (DD/MM/YYYY)", value=default_date, key="date1")
+    st.subheader("Mystery")
+    date1 = st.date_input("Birth Date (DD/MM/YYYY)", value=default_date, key="date1", min_value=date(1900,1,1), max_value=date(2100,12,31))
     time1 = st.time_input("Birth Time (optional, default noon)", value=default_time, key="time1", step=timedelta(minutes=1))
     tz1 = st.selectbox("Timezone", options=tz_options, index=tz_options.index(default_tz), key="tz1")
     lat1 = st.number_input("Latitude (decimal degrees)", value=default_lat, key="lat1")
     lon1 = st.number_input("Longitude (decimal degrees)", value=default_lon, key="lon1")
 
 with col2:
-    st.subheader("Person 2")
-    date2 = st.date_input("Birth Date (DD/MM/YYYY)", value=default_date, key="date2")
+    st.subheader("Enigma")
+    date2 = st.date_input("Birth Date (DD/MM/YYYY)", value=default_date, key="date2", min_value=date(1900,1,1), max_value=date(2100,12,31))
     time2 = st.time_input("Birth Time (optional, default noon)", value=default_time, key="time2", step=timedelta(minutes=1))
     tz2 = st.selectbox("Timezone", options=tz_options, index=tz_options.index(default_tz), key="tz2")
     lat2 = st.number_input("Latitude (decimal degrees)", value=default_lat, key="lat2")
     lon2 = st.number_input("Longitude (decimal degrees)", value=default_lon, key="lon2")
-
-def get_tz_offset(tz_str):
-    sign = 1 if '+' in tz_str else -1
-    offset_str = tz_str.split('UTC')[1].lstrip('+-')
-    hours, minutes = map(float, offset_str.split(":"))
-    return sign * (hours + minutes / 60)
 
 offset1 = get_tz_offset(tz1)
 offset2 = get_tz_offset(tz2)
@@ -308,19 +334,19 @@ if st.button("Match and Explore 🔍"):
 
     st.subheader("Numerology Insights 🔢")
     meanings = ['', 'Independence', 'Sensitivity', 'Creativity', 'Stability', 'Freedom', 'Harmony', 'Wisdom', 'Power', 'Humanitarianism']
-    st.write(f"Person 1 Life Path: {lp1} 🌟 - Represents {meanings[lp1 % 9]}.")
-    st.write(f"Person 2 Life Path: {lp2} 🌟 - Represents {meanings[lp2 % 9]}.")
+    st.write(f"Mystery Life Path: {lp1} 🌟 - Represents {meanings[lp1 % 9]}.")
+    st.write(f"Enigma Life Path: {lp2} 🌟 - Represents {meanings[lp2 % 9]}.")
     if lp1 == lp2 or abs(lp1 - lp2) in [2, 4]:
         st.write("Harmonious compatibility, suggesting soulmate or soul family ties! 👫")
 
     st.subheader("Astrological Charts 📊")
-    st.write("**Person 1 Positions:**")
+    st.write("**Mystery Positions:**")
     for p, lon in positions1.items():
         sign = get_zodiac_sign(lon)
         deg = lon % 30
         st.write(f"{p.capitalize()} in {sign} at {deg:.2f}° 🌌")
 
-    st.write("**Person 2 Positions:**")
+    st.write("**Enigma Positions:**")
     for p, lon in positions2.items():
         sign = get_zodiac_sign(lon)
         deg = lon % 30
@@ -333,10 +359,10 @@ if st.button("Match and Explore 🔍"):
             aspect = get_aspect(diff)
             if aspect:
                 indication = 'intense mirror for twin flame' if 'Conjunction' in aspect or 'Opposition' in aspect else 'harmonious soulmate flow' if 'Trine' in aspect or 'Sextile' in aspect else 'karmic challenge' if 'Square' in aspect else ''
-                st.write(f"{p1.capitalize()} (Person 1) {aspect} {p2.capitalize()} (Person 2) with orb {diff:.2f}° 💫 - Indicates {indication}.")
+                st.write(f"{p1.capitalize()} (Mystery) {aspect} {p2.capitalize()} (Enigma) with orb {diff:.2f}° 💫 - Indicates {indication}.")
 
     st.subheader("Starseed Indicators 👽")
-    for person, positions in [("Person 1", positions1), ("Person 2", positions2)]:
+    for person, positions in [("Mystery", positions1), ("Enigma", positions2)]:
         indicators = []
         if 24 <= (positions.get('uranus', 0) % 30) <= 29:
             indicators.append("Uranus in critical degrees - Possible Pleiadian origins 🌟")
