@@ -80,7 +80,8 @@ def calculate_planet_position(d, planet, x_earth, y_earth, z_earth, mj, ms, mu, 
             break
     xv = a * (cos(radians(E)) - e)
     yv = a * sqrt(1 - e**2) * sin(radians(E))
-    v = sqrt(xv**2 + yv**2)
+    r = sqrt(xv**2 + yv**2)
+    v = degrees(atan2(yv, xv))
     vrad = radians(v + w)
     Nr = radians(N)
     ir = radians(i)
@@ -108,7 +109,7 @@ def calculate_ascendant(d, lat, lon_deg):
     cos_e = cos(radians(oblecl))
     tan_gl = tan(radians(lat))
     sin_ramc = sin(radians(ramc))
-    cos_ramc = cos(radians(ramc ))
+    cos_ramc = cos(radians(ramc))
     denominator = cos_ramc * cos_e - sin_e * tan_gl * sin_ramc
     if denominator == 0:
         denominator = 1e-10
@@ -157,9 +158,7 @@ with st.expander("About Starseeds ⭐👽"):
     - Heightened empathy, intuition, or psychic sensitivities. 🔮
     - Intense interest in astronomy, UFOs, ancient cultures, or cosmic phenomena. 🌠
     - A strong sense of purpose, often directed toward activism, healing professions, or spiritual guidance. 🌍
-    - Sensitivities to environmental factors like noise, food, or energies. 🌿�
-
-    From a psychological standpoint, identifying as a starseed can provide a sense of purpose for those feeling disconnected in modern life, serving as a coping mechanism for existential unease, though it lacks empirical scientific support. Critics highlight potential historical ties to problematic ideologies, such as white supremacy in early formulations, and view it as pseudoscience. The idea gained traction through books, online forums, and influencers in spiritual communities.
+    - Sensitivities to environmental factors like noise, food, or energies. 🌿
     """)
 
 with st.expander("About Twin Flames 🔥💑"):
@@ -219,7 +218,7 @@ st.header("Enter Birth Details for Two Persons 📅")
 
 col1, col2 = st.columns(2)
 
-default_date = "IST (UTC+5:30)"
+default_date = date(1993, 7, 12)
 default_time = time(12, 0)
 default_tz = "IST (UTC+5:30)"
 default_lat = 13.3159  # 13.3159° N
@@ -249,7 +248,6 @@ tz_options = [
 ]
 
 def get_tz_offset(tz_str):
-    # Extract UTC offset from string like "IST (UTC+5:30)"
     if '(' not in tz_str:
         return 0.0
     offset_part = tz_str.split('(')[1].split(')')[0].replace('UTC', '')
@@ -262,7 +260,7 @@ def get_tz_offset(tz_str):
 
 with col1:
     st.subheader("Mystery")
-    date1 = st.date_input("Birth Date (DD/MM/YYYY)", value=default_date, key="date1", min_value=date(1900,1,1), max_value=date(2100,12,31))
+    date1 = st.date_input("Birth Date", value=default_date, key="date1", min_value=date(1900,1,1), max_value=date(2100,12,31))
     time1 = st.time_input("Birth Time (optional, default noon)", value=default_time, key="time1", step=timedelta(minutes=1))
     tz1 = st.selectbox("Timezone", options=tz_options, index=tz_options.index(default_tz), key="tz1")
     lat1 = st.number_input("Latitude (decimal degrees)", value=default_lat, key="lat1")
@@ -270,7 +268,7 @@ with col1:
 
 with col2:
     st.subheader("Enigma")
-    date2 = st.date_input("Birth Date (DD/MM/YYYY)", value=default_date, key="date2", min_value=date(1900,1,1), max_value=date(2100,12,31))
+    date2 = st.date_input("Birth Date", value=default_date, key="date2", min_value=date(1900,1,1), max_value=date(2100,12,31))
     time2 = st.time_input("Birth Time (optional, default noon)", value=default_time, key="time2", step=timedelta(minutes=1))
     tz2 = st.selectbox("Timezone", options=tz_options, index=tz_options.index(default_tz), key="tz2")
     lat2 = st.number_input("Latitude (decimal degrees)", value=default_lat, key="lat2")
